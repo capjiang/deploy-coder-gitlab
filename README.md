@@ -5,6 +5,10 @@ Deploying coder, gitlab, gitlabrunner on an Ubuntu 22.04 LTS environment
 ## 1、Download
 
 > [Ubuntu 22.04.4 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
+>
+> https://releases.ubuntu.com/jammy/ubuntu-22.04.4-desktop-amd64.iso
+
+ubuntu-22.04.4-desktop-amd64.iso
 
 ## 2、Update
 

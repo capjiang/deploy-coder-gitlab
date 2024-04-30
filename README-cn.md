@@ -6,7 +6,11 @@
 
 > [Ubuntu 22.04.4 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
 >
+> https://releases.ubuntu.com/jammy/ubuntu-22.04.4-desktop-amd64.iso
+>
 > [VMware虚拟机安装Ubuntu 22.04：从入门到精通 (baidu.com)](https://cloud.baidu.com/article/3280919)
+
+桌面版：ubuntu-22.04.4-desktop-amd64.iso
 
 ## 2、升级
 
