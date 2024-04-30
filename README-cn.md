@@ -381,9 +381,29 @@ resource "docker_container" "workspace" {
 sudo chown -R $USER /home/coder-1/
 ~~~
 
-ssh 连接 gitlab (需完成 步骤10)
+#### 8.4.2、Git
 
-**不是 coder 官方集成 gitlab 方法，目前在改善**
+self-managed GitLab 需完成步骤10
+
+##### 8.4.2.1、http（推荐）
+
+需完成到10.3
+
+~~~bash
+# git clone
+git clone http://192.168.79.134:30080/group1/project-1.git
+#Cloning into 'project-1'...
+#Open the following URL to authenticate with Git:
+#http://127.0.0.1:7080/external-auth/primary-gitlab (ctrl+鼠标左键)
+
+# 浏览器会打开网站自动进行认证，然后出现 “You've authenticated with GitLab!”
+#You are now authenticated. Feel free to close this window!
+#......
+~~~
+
+##### 8.4.2.2、ssh
+
+ssh 连接 gitlab，不是 coder 官方集成 gitlab 方法
 
 ~~~bash
 # 登录 git
@@ -482,8 +502,6 @@ gitlab_rails['time_zone'] = 'Asia/Shanghai'
 
 ### 10.3、集成
 
-TODO: gitlab 和 coder 官方集成方式尚未完善
-
 **gitlab:**
 
 应用程序
@@ -491,7 +509,7 @@ TODO: gitlab 和 coder 官方集成方式尚未完善
 name: any-you-like
 Redirect URI: <CODER_ACCESS_URL>/external-auth/<CODER_EXTERNAL_AUTH_0_ID>/callback
 
-name: coder
+name: coder2
 Redirect URI: http://127.0.0.1:7080/external-auth/primary-gitlab/callback
 
 **coder:**
@@ -502,8 +520,8 @@ sudo vim /etc/coder.d/coder.env
 CODER_EXTERNAL_AUTH_0_ID="primary-gitlab"
 CODER_EXTERNAL_AUTH_0_TYPE=gitlab
 # This value is the "Application ID"
-CODER_EXTERNAL_AUTH_0_CLIENT_ID=
-CODER_EXTERNAL_AUTH_0_CLIENT_SECRET=
+CODER_EXTERNAL_AUTH_0_CLIENT_ID=1be4b7b1884ed2557e919ec57fb0ed54fcebc5b16c99ac0fc7fe3734867666a7
+CODER_EXTERNAL_AUTH_0_CLIENT_SECRET=gloas-aef10a18df42186844c5307d36eefc2a1e071437995db3a0d22ff187fc7c625c
 CODER_EXTERNAL_AUTH_0_VALIDATE_URL="http://192.168.79.134:30080/oauth/token/info"
 CODER_EXTERNAL_AUTH_0_AUTH_URL="http://192.168.79.134:30080/oauth/authorize"
 CODER_EXTERNAL_AUTH_0_TOKEN_URL="http://192.168.79.134:30080/oauth/token"
@@ -609,4 +627,3 @@ docker:stable
 
 ## 问题
 
-如 8.4.1, 10.3 所示，还未能使用 coder 官方集成 gitlab 方式，目前只是通过 ssh 密钥来获取代码

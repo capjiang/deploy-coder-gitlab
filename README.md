@@ -379,9 +379,29 @@ There may be permissions issues when using code-server
 sudo chown -R $USER /home/coder-1/
 ~~~
 
-ssh to gitlab (requires step 10)
+#### 8.4.2、Git
 
-**Not the coder official gitlab integration method, currently being improved.**
+Self-managed GitLab needs to complete step 10.
+
+##### 8.4.2.1、http (Recommendation)
+
+need 10.3
+
+~~~bash
+# git clone
+git clone http://192.168.79.134:30080/group1/project-1.git
+#Cloning into 'project-1'...
+#Open the following URL to authenticate with Git:
+#http://127.0.0.1:7080/external-auth/primary-gitlab (ctrl+left mouse button)
+
+# The browser will open the site to authenticate automatically, and then "You've authenticated with GitLab!" will appear.
+#You are now authenticated. Feel free to close this window!
+#......
+~~~
+
+##### 8.4.2.2、ssh
+
+ssh to gitlab, not coder's official gitlab integration method.
 
 ~~~bash
 # config git
@@ -480,8 +500,6 @@ gitlab_rails['time_zone'] = 'Asia/Shanghai'
 
 ### 10.3、integrated
 
-TODO: The official way of integrating gitlab and coder is not yet complete.
-
 **gitlab:**
 
 Application
@@ -489,7 +507,7 @@ Application
 name: any-you-like
 Redirect URI: <CODER_ACCESS_URL>/external-auth/<CODER_EXTERNAL_AUTH_0_ID>/callback
 
-name: coder
+name: coder2
 Redirect URI: http://127.0.0.1:7080/external-auth/primary-gitlab/callback
 
 **coder:**
@@ -500,8 +518,8 @@ sudo vim /etc/coder.d/coder.env
 CODER_EXTERNAL_AUTH_0_ID="primary-gitlab"
 CODER_EXTERNAL_AUTH_0_TYPE=gitlab
 # This value is the "Application ID"
-CODER_EXTERNAL_AUTH_0_CLIENT_ID=
-CODER_EXTERNAL_AUTH_0_CLIENT_SECRET=
+CODER_EXTERNAL_AUTH_0_CLIENT_ID=1be4b7b1884ed2557e919ec57fb0ed54fcebc5b16c99ac0fc7fe3734867666a7
+CODER_EXTERNAL_AUTH_0_CLIENT_SECRET=gloas-aef10a18df42186844c5307d36eefc2a1e071437995db3a0d22ff187fc7c625c
 CODER_EXTERNAL_AUTH_0_VALIDATE_URL="http://192.168.79.134:30080/oauth/token/info"
 CODER_EXTERNAL_AUTH_0_AUTH_URL="http://192.168.79.134:30080/oauth/authorize"
 CODER_EXTERNAL_AUTH_0_TOKEN_URL="http://192.168.79.134:30080/oauth/token"
@@ -604,6 +622,5 @@ docker:stable
 #Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
 ~~~
 
-## Problem
+## issues
 
-As shown in 8.4.1, 10.3, we can't use coder's official gitlab integration yet, but we can only fetch the code via ssh key.
