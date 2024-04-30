@@ -1,13 +1,14 @@
 # deploy-coder-gitlab
+
 在 Ubuntu 22.04 LTS 环境下，部署 coder，gitlab，gitlabrunner
 
-## 下载
+## 1、下载
 
 > [Ubuntu 22.04.4 LTS (Jammy Jellyfish)](https://releases.ubuntu.com/jammy/)
 >
 > [VMware虚拟机安装Ubuntu 22.04：从入门到精通 (baidu.com)](https://cloud.baidu.com/article/3280919)
 
-## 升级
+## 2、升级
 
 ~~~bash
 # 升级内核
@@ -17,7 +18,7 @@ sudo apt-get upgrade
 shutdown -r now
 ~~~
 
-## 防火墙
+## 3、防火墙
 
 ~~~bash
 # 查看状态
@@ -26,32 +27,34 @@ sudo ufw status
 sudo ufw disable
 ~~~
 
-## Xshell 连接
+## 4、Xshell 
 
 方便 copy 命令
 
 > [Xshell 连接 Ubuntu 教程（超详细）,并解决二个常见问题（一直连不上、root用户拒绝密码）_xshell连接ubuntu-CSDN博客](https://blog.csdn.net/qq_44222849/article/details/105043739)
 
 ~~~bash
-# 1、执行下句，下载SSH服务
+# 1、下载SSH服务
 sudo apt-get install openssh-server
-# 2、执行下句，验证下载后是否已经开启了服务：
+# 2、验证下载后是否已经开启了服务：
 ps -e | grep ssh
 # 如果只有 ssh-agent 表示还没启动。
-# 3、执行下句，开启服务
+# 执行下句，开启服务
 /etc/init.d/ssh start
 # 如果显示 sshd 则说明已启动成功。
 ipconfig -a 
 ip addr
 ~~~
 
-## Clash
+## 5、Clash
 
 > [FBIMAY0/ClashForWindows_Archive: Clash for Windows Repository is deleted, here are its releases. (github.com)](https://github.com/FBIMAY0/ClashForWindows_Archive) 
 >
 > [Ubuntu 配置clash的四种方式 – 日拱一卒 (joeyne.cool)](https://www.joeyne.cool/http/proxy/ubuntu-安装clash并配置开机启动/#clash-for-windows)
 
-推荐方式
+clash 可解决国内访问 github 网络问题，仅学习使用
+
+### 5.1、推荐方式
 
 ~~~bash
 # download
@@ -90,7 +93,7 @@ chmod +x clash.desktop
 # 上面步骤操作完成，如果看不到应用程序图标，可以尝试注销用户或者直接搜索 clash
 ~~~
 
-另外的方法：(可能没用)
+### **5.2、另外的方法(可能没用)**
 
 > [Elegycloud/clash-for-linux-backup: 基于Clash Core 制作的Clash For Linux备份仓库 A Clash For Linux Backup Warehouse Based on Clash Core (github.com)](https://github.com/Elegycloud/clash-for-linux-backup/tree/main)
 
@@ -122,7 +125,7 @@ https_proxy=http://127.0.0.1:7890
 http_proxy=http://127.0.0.1:7890
 ~~~
 
-## **Docker**
+## **6、Docker**
 
 > [Install Docker Engine on Ubuntu | Docker Docs](https://docs.docker.com/engine/install/ubuntu/)
 > [Linux post-installation steps for Docker Engine | Docker Docs](https://docs.docker.com/engine/install/linux-postinstall/)
@@ -165,7 +168,7 @@ sudo systemctl enable docker.service
 sudo systemctl enable containerd.service
 ~~~
 
-## Sysbox
+## 7、Sysbox
 
 > [sysbox/docs/user-guide/install-package.md at master · nestybox/sysbox (github.com)](https://github.com/nestybox/sysbox/blob/master/docs/user-guide/install-package.md#sysbox-user-guide-installation-with-the-sysbox-package)
 
@@ -195,11 +198,11 @@ sudo vim /etc/docker/daemon.json
 sudo systemctl restart docker
 ~~~
 
-## Coder
+## 8、Coder
 
 > [Installation - Coder v2 Docs](https://coder.com/docs/v2/latest/install)
 
-### 搭建
+### 8.1、搭建
 
 数据库
 
@@ -228,7 +231,7 @@ systemctl restart coder
 systemctl status coder
 ~~~
 
-### 配置
+### 8.2、配置
 
 sudo vim /etc/coder.d/coder.env
 
@@ -246,11 +249,11 @@ CODER_TLS_KEY_FILE=
 # Run "coder server --help" for flag information.
 ~~~
 
-### Template
+### 8.3、Template
 
-2种创建 docker 内使用 docker 的方式
+2种创建docker容器内使用docker的方式 8.3.1、8.3.2
 
-#### Sysbox
+#### 8.3.1、Sysbox（推荐）
 
 可基于 starter docker template 修改（推荐）
 
@@ -325,7 +328,7 @@ resource "docker_container" "workspace" {
 }
 ~~~
 
-#### 宿主机 docker
+#### 8.3.2、宿主机 docker
 
 starter docker template（不安全）
 
@@ -365,9 +368,9 @@ resource "docker_container" "workspace" {
 }
 ~~~
 
-### Workspace
+### 8.4、Workspace
 
-#### code-server
+#### 8.4.1、code-server
 
 需要持久化文件放在 /home/<coder-user-name>/ 下，而不是 /home/coder 下
 
@@ -376,6 +379,13 @@ resource "docker_container" "workspace" {
 ~~~bash
 # 修改当前目录权限
 sudo chown -R $USER /home/coder-1/
+~~~
+
+ssh 连接 gitlab (需完成 步骤10)
+
+**不是 coder 官方集成 gitlab 方法，目前在改善**
+
+~~~bash
 # 登录 git
 git config --global user.name "Your Name"
 git config --global user.email "your_email@example.com"
@@ -389,7 +399,7 @@ git clone git@192.168.79.134:example-group/example-project.git
 # 输入 yes
 ~~~
 
-## Redis
+## 9、Redis
 
 > [Install Redis on Linux | Docs](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-linux/)
 
@@ -427,13 +437,13 @@ requirepass user0632
 
 `systemctl restart redis-server` 重启 redis
 
-## Gitlab
+## 10、Gitlab
 
 > [Download and install GitLab | GitLab](https://about.gitlab.com/install/#ubuntu)
 >
 > [Configuring a Linux package installation | GitLab](https://docs.gitlab.com/omnibus/settings/)
 
-### 搭建
+### 10.1、搭建
 
 ~~~bash
 # 准备：升级 + redis
@@ -459,7 +469,7 @@ sudo cat /etc/gitlab/initial_root_password
 # 访问 http://192.168.79.134:30080
 ~~~
 
-### 配置
+### 10.2、配置
 
 ~~~bash
 sudo vim /etc/gitlab/gitlab.rb
@@ -470,7 +480,7 @@ registry_external_url 'http://192.168.79.134:30080'
 gitlab_rails['time_zone'] = 'Asia/Shanghai'
 ~~~
 
-### 集成
+### 10.3、集成
 
 TODO: gitlab 和 coder 官方集成方式尚未完善
 
@@ -506,13 +516,15 @@ CODER_EXTERNAL_AUTH_0_REGEX=192\.168\.79\.134:30080
 
 管理中心 -> CI/CD -> Runner -> 新建实例 runner（tag 是以后需要运行任务的标志，descript ≈ 名称，不填也没事）
 
-## Gitlab-runner
+## 11、Gitlab-runner
 
 > [Install GitLab Runner manually on GNU/Linux | GitLab](https://docs.gitlab.com/runner/install/linux-manually.html)
 >
 > [Registering runners | GitLab](https://docs.gitlab.com/runner/register/index.html)
 
-### 官方 Ubuntu
+2种方式11.1，11.2
+
+### 11.1、官方 Ubuntu
 
 部署在和gitlab同一个服务器，正常运行过一次，但是机器重启后 sysbox 什么的都瘫痪了，建议看 Docker 方式
 
@@ -561,7 +573,7 @@ gitlab-runner list
 
 `sudo vim /etc/gitlab-runner/config.toml`
 
-### Docker
+### 11.2、Docker（推荐）
 
 > [Run GitLab Runner in a container | GitLab](https://docs.gitlab.com/runner/install/docker.html)
 >
@@ -594,3 +606,7 @@ docker:stable
  
 #Configuration (with the authentication token) was saved in "/etc/gitlab-runner/config.toml"
 ~~~
+
+## 问题
+
+如 8.4.1, 10.3 所示，还未能使用 coder 官方集成 gitlab 方式，目前只是通过 ssh 密钥来获取代码
