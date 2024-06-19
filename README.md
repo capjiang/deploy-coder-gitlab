@@ -44,7 +44,7 @@ ps -e | grep ssh
 # 3. Start the service
 /etc/init.d/ssh start
 # 4. copy the ens:32 ip
-ipconfig -a 
+ifconfig -a 
 ip addr
 ~~~
 
